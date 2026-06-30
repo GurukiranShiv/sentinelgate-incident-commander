@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evidence-Gated Incident Commander Advanced</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <main class="app-shell">
+    <section class="hero glass reveal">
+      <div class="hero-copy">
+        <p class="eyebrow">Advanced SOC / SOAR command center</p>
+        <h1>Evidence-Gated Incident Commander</h1>
+        <p class="hero-text">A portfolio-ready IR assistant that keeps the serious logic behind the UI: deterministic playbooks, evidence gates, human approval controls, case persistence, async jobs, attack graph output, and SOC-style search.</p>
+        <div class="hero-actions">
+          <button id="demoBtn" class="primary">Load Cloud IAM Demo</button>
+          <button id="ransomBtn" class="secondary">Load Ransomware Demo</button>
+          <button id="asyncBtn" class="secondary">Run Async SOAR Job</button>
+          <button id="copyBtn" class="secondary">Copy JSON</button>
+          <button id="mdBtn" class="secondary">Copy Markdown</button>
+        </div>
+      </div>
+      <div class="radar-card">
+        <div class="radar">
+          <span></span><span></span><span></span><span></span>
+          <div class="sweep"></div>
+          <div class="blip b1"></div><div class="blip b2"></div><div class="blip b3"></div>
+        </div>
+        <p>Evidence-Gated Response Engine</p>
+      </div>
+    </section>
+
+    <section class="architecture glass reveal">
+      <div>
+        <p class="eyebrow">Advanced architecture</p>
+        <h2>Built like a mini SOAR platform</h2>
+      </div>
+      <div class="arch-flow">
+        <span>Dashboard</span><b>→</b><span>FastAPI</span><b>→</b><span>Decision Engine</span><b>→</b><span>Case DB</span><b>→</b><span>Graph/Search</span><b>→</b><span>Approval Log</span>
+      </div>
+    </section>
+
+    <section class="grid-two">
+      <form id="incidentForm" class="panel glass reveal">
+        <div class="panel-heading">
+          <p class="eyebrow">Incident intake</p>
+          <h2>Build the case</h2>
+        </div>
+        <label>Incident Type
+          <select id="incidentType" required></select>
+        </label>
+        <label>Severity
+          <select id="severity">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+          </select>
+        </label>
+        <label>Environment
+          <input id="environment" value="hybrid enterprise" placeholder="cloud, endpoint, web, hybrid" />
+        </label>
+        <label>Analyst / Team
+          <input id="analyst" value="SOC Analyst" placeholder="SOC L1, SOC L2, IR Lead" />
+        </label>
+        <label>Affected Assets <span>comma separated</span>
+          <input id="assets" placeholder="WIN-FILE-01, user@company.com, AWS-Prod" />
+        </label>
+        <label>Indicators / Evidence Already Known <span>comma separated</span>
+          <input id="indicators" placeholder="CloudTrail CreateAccessKey, hash, IP, domain, CVE, MFA fatigue" />
+        </label>
+        <label>Analyst Notes
+          <textarea id="notes" rows="5" placeholder="What triggered the alert? What evidence do we already have?"></textarea>
+        </label>
+        <button class="primary full" type="submit">Generate Commander Plan</button>
+      </form>
+
+      <aside class="panel glass reveal delay">
+        <div class="panel-heading">
+          <p class="eyebrow">Why this stands out</p>
+          <h2>Not a static checklist</h2>
+        </div>
+        <div class="metric">
+          <div>
+            <strong id="scoreLabel">98%+</strong>
+            <span>playbook confidence target</span>
+          </div>
+          <div class="ring"><span id="ringScore">98</span></div>
+        </div>
+        <ul class="feature-list">
+          <li>Evidence-locked actions: missing evidence blocks risky containment.</li>
+          <li>Green / Yellow / Red approval gates for human-in-the-loop SOAR.</li>
+          <li>Case persistence in SQLite locally or PostgreSQL in Docker mode.</li>
+          <li>Attack graph output, Neo4j-ready connector, and SOC search index.</li>
+          <li>Async job route that models how SOAR enrichment runs behind the UI.</li>
+        </ul>
+        <div class="mini-board">
+          <div><strong>Green</strong><span>Safe automation</span></div>
+          <div><strong>Yellow</strong><span>Analyst approval</span></div>
+          <div><strong>Red</strong><span>IR lead approval</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel glass reveal">
+      <div class="panel-heading row-heading">
+        <div>
+          <p class="eyebrow">Case history / SOC search</p>
+          <h2>Stored commander reports</h2>
+        </div>
+        <div class="search-box">
+          <input id="searchInput" placeholder="Search previous cases, IPs, tactics..." />
+          <button id="searchBtn" class="secondary" type="button">Search</button>
+          <button id="historyBtn" class="secondary" type="button">Refresh History</button>
+        </div>
+      </div>
+      <div id="history" class="history"></div>
+    </section>
+
+    <section id="output" class="output hidden">
+      <div class="commander-strip glass">
+        <div>
+          <p class="eyebrow">Commander brief</p>
+          <h2 id="outputTitle">Incident Plan</h2>
+          <p id="brief"></p>
+        </div>
+        <div class="severity-pill" id="severityPill">MEDIUM</div>
+      </div>
+
+      <div class="story glass">
+        <p class="eyebrow">Attack storyline</p>
+        <div id="storyline" class="storyline"></div>
+      </div>
+
+      <div class="cards">
+        <article class="result-card glass"><h3>Architecture Trace</h3><ul id="archTrace"></ul></article>
+        <article class="result-card glass"><h3>SOAR Lifecycle</h3><div class="timeline" id="timeline"></div></article>
+      </div>
+
+      <article class="result-card glass wide">
+        <h3>Evidence Relationship Graph</h3>
+        <div id="graph" class="graph"></div>
+      </article>
+
+      <div class="cards">
+        <article class="result-card glass"><h3>Investigation Checklist</h3><ol id="investigation"></ol></article>
+        <article class="result-card glass"><h3>Evidence List</h3><ul id="evidence"></ul></article>
+      </div>
+
+      <article class="result-card glass wide">
+        <h3>Evidence-Gated Containment Actions</h3>
+        <div id="gates" class="gate-grid"></div>
+      </article>
+
+      <div class="cards">
+        <article class="result-card glass"><h3>Containment Plan</h3><ol id="containment"></ol></article>
+        <article class="result-card glass"><h3>Priority Actions</h3><ul id="priority"></ul></article>
+      </div>
+
+      <div class="cards small-cards">
+        <article class="result-card glass"><h3>Approval Matrix</h3><div id="approval" class="approval"></div></article>
+        <article class="result-card glass"><h3>MITRE ATT&CK Tactics</h3><div id="mitre" class="chips"></div></article>
+      </div>
+
+      <div class="cards">
+        <article class="result-card glass"><h3>Escalation Summary</h3><p id="escalation"></p></article>
+        <article class="result-card glass"><h3>AI / SOAR Safety Guardrails</h3><ul id="assurance"></ul></article>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast">Copied</div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

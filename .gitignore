@@ -1,0 +1,70 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment / secrets
+.env
+.env.local
+.env.production
+*.pem
+*.key
+*.crt
+
+# Local databases and generated data
+*.db
+*.sqlite
+*.sqlite3
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/cases.db
+data/search_index.jsonl
+
+# Logs
+*.log
+logs/
+
+# Test / coverage output
+.coverage
+htmlcov/
+coverage.xml
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+
+# Node / Next.js frontend cache
+frontend-next/node_modules/
+frontend-next/.next/
+frontend-next/out/
+frontend-next/.env.local
+
+# Docker/local runtime
+*.pid
+docker-data/
+opensearch-data/
+neo4j-data/
+postgres-data/
+redis-data/
+
+# ZIP files / packaged outputs
+*.zip
+
+# Keep screenshots folder, but ignore zipped screenshots
+Screenshots.zip
+Screenshots/*.zip
