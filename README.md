@@ -505,4 +505,4 @@ because the README uses those images.
 
 **Gurukiran Shivashankar**  
 M.S. Cybersecurity  
-SOC Analyst / Cybersecurity Analyst Portfolio Project
+SOC Analyst
